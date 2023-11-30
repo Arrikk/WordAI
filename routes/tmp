@@ -1,0 +1,2 @@
+const name = require('express').Router()
+module.exports = name

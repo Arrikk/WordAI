@@ -1,0 +1,17 @@
+const crypto = require("crypto");
+
+const generateApiKey = () => {
+    const randomString = crypto.randomBytes(16).toString('hex');
+  
+    // Concatenate the random string with the secret key
+    const combinedString = randomString + "iorito";
+  
+    // Hash the combined string using SHA-256
+    const apiKey = crypto.createHash('sha256').update(combinedString).digest('hex');
+  
+    return apiKey;
+};
+
+module.exports = {
+  generateApiKey,
+};
