@@ -34,8 +34,8 @@ class App {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(cors({ origin: "*" }))
 
-    app.use('/public', express.static(path.join(__dirname, 'public')));
-
+    app.use('/public', express.static(path.join(__dirname, '/public/widget.js')));
+    // app.use('/public', (req, res) => res.send("Hello"))
     // app.use(errorHandler)
     routes.map((route) => {
       route.object.map((e) => {
