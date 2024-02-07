@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 .babelrc
 static/word.txt
+vercel.json
