@@ -31,6 +31,9 @@
     "pdf-parse": "^1.1.1",
     "validator": "^13.11.0"
   },
+  "engines": {
+    "node": "18.16.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.23.3",
     "@babel/node": "^7.22.19",
