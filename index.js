@@ -20,20 +20,20 @@ init.runApp([
       googleAuthRouteV1,
       authRouteV1,
       conversationRoute,
-      // chatv1,
-      // apiRouter
+      chatv1,
+      apiRouter
     ],
   },
   {
     path: "/api/v2/",
     object: [ 
-      // chatv2
+      chatv2
     ],
   },
   {
     path: "/api/v3/",
     object: [ 
-      // chatv3
+      chatv3
     ],
   },
 
