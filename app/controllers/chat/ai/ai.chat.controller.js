@@ -49,16 +49,19 @@ const aiQuestionAnswerController = async (req, res, next) => {
     let vectorStore;
 
     // Check if a vector store already exists.
-    if (fc?.VECTOR_EXISTS) {
-      // Load the existing vector store if it exists.
-      vectorStore = await HNSWLib.load(fc.VECTOR_STORE_PATH, ai.Embedding);
-    }
+    if (!fc?.VECTOR_EXISTS)
+      return errorMessage(400, "Vector store does not exist")(res);
+    // Load the existing vector store if it exists.
+    vectorStore = await HNSWLib.load(fc.VECTOR_STORE_PATH, ai.Embedding);
 
-     // Create a retrieval and question-answering chain using AI services.
-    const chain = RetrievalQAChain.fromLLM(ai.openai, vectorStore.asRetriever());
-     // Perform a question-answering query based on the user's question.
+    // Create a retrieval and question-answering chain using AI services.
+    const chain = RetrievalQAChain.fromLLM(
+      ai.openai,
+      vectorStore.asRetriever()
+    );
+    // Perform a question-answering query based on the user's question.
     const query = await chain.call({ query: question });
-     // Extract the answer from the query result.
+    // Extract the answer from the query result.
     const answer = query?.text;
     // Return a success response with the answer and additional information.
     return successMessage(200, "Answer", {
@@ -67,42 +70,49 @@ const aiQuestionAnswerController = async (req, res, next) => {
       chunks: { size: 2000, lap: 200 },
     })(res);
   } catch (e) {
-     // Handle and return an error response in case of an exception.
+    // Handle and return an error response in case of an exception.
     const message = e?.message ? e?.message : e?.error;
     return errorMessage(400, message)(res);
   }
 };
 
 const aiCompleteUnknownController = async (question, text) => {
-    const unknown = [
-      " I'm sorry, I don't know.",
-      "Hi there! I'm sorry, but I'm not able to answer your question.",
-      " I'm sorry, I don't know the answer to your question.",
-      "I don't know.",
-      "Hi! Unfortunately I don't know the answer to your question.",
-      " I'm not able to help you with this question."
-    ];
+  const unknown = [
+    " I'm sorry, I don't know.",
+    "Hi there! I'm sorry, but I'm not able to answer your question.",
+    " I'm sorry, I don't know the answer to your question.",
+    "I don't know.",
+    "Hi! Unfortunately I don't know the answer to your question.",
+    " I'm not able to help you with this question.",
+  ];
 
-    let iDontKnow = unknown.some(t => t.toLowerCase().trim() === text.toLowerCase().trim())
-    // console.log({iDontKnow})
+  let iDontKnow = unknown.some(
+    (t) => t.toLowerCase().trim() === text.toLowerCase().trim()
+  );
+  // console.log({iDontKnow})
 
-    if(iDontKnow) return await aiChatOpenAIService(question, text)
-    return text
+  if (iDontKnow) return await aiChatOpenAIService(question, text);
+  return text;
 };
 
-
 const validateApiKeyController = async (req, res, next) => {
-  try{
-    const apiKey = req.headers['x-token']
-    if(!apiKey) return errorMessage(401, "Please Provide an authorization token")(res)
-  
-    const token = await apikeySchema.findOne({secret: apiKey});
-    if(!token) return errorMessage(401, "Invalid Auth Token")(res)
-    return next()
-  }catch(e){
-    const mssg = e?.message ? e?.message : e.error
-    return errorMessage(400, mssg)(res)
-  }
-}
+  try {
+    const apiKey = req.headers["x-token"];
+    if (!apiKey)
+      return errorMessage(401, "Please Provide an authorization token")(res);
 
-module.exports = { isRequiredAiParamController, aiQuestionAnswerController, aiCompleteUnknownController, validateApiKeyController};
+    const token = await apikeySchema.findOne({ secret: apiKey });
+    if (!token) return errorMessage(401, "Invalid Auth Token")(res);
+    return next();
+  } catch (e) {
+    const mssg = e?.message ? e?.message : e.error;
+    return errorMessage(400, mssg)(res);
+  }
+};
+
+module.exports = {
+  isRequiredAiParamController,
+  aiQuestionAnswerController,
+  aiCompleteUnknownController,
+  validateApiKeyController,
+};

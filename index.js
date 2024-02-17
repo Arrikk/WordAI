@@ -1,5 +1,5 @@
 const App = require("./app/app");
-const chatv1 = require('./routes/chat/chat.v1.routes')
+const chatv1 = require('./routes/v1/chat.v1.routes')
 const chatv2 = require('./routes/chat/chat.v2.routes')
 const chatv3 = require('./routes/chat/chat.v3.routes')
 const googleAuthRouteV1 = require('./routes/v1/auth/google.routes');
@@ -29,12 +29,6 @@ init.runApp([
     object: [ 
       chatv2
     ],
-  },
-  {
-    path: "/api/v3/",
-    object: [ 
-      chatv3
-    ],
-  },
+  }
 
 ]);

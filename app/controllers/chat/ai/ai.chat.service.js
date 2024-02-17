@@ -40,13 +40,13 @@ const aiChatFileLoaderService = async () => {
     const vector_exists = fs.existsSync(VECTOR_STORE_PATH)
 
     // Load data from the PDF fil
-    const fileData = await filePDFReader(fileFullPath);
+    // const fileData = await filePDFReader(fileFullPath);
 
     return {
       VECTOR_STORE_PATH: VECTOR_STORE_PATH,
       FILE_PATH: fileFullPath,
       FILE_NAME: fileName,
-      BOOK_DATA: fileData,
+      BOOK_DATA: null,
       VECTOR_EXISTS: vector_exists
     };
   } catch (e) {
