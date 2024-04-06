@@ -6,6 +6,7 @@ const googleAuthRouteV1 = require('./routes/v1/auth/google.routes');
 const conversationRoute = require("./routes/v1/conversation.chat.routes");
 const authRouteV1 = require("./routes/v1/auth/email.routes");
 const apiRouter = require("./routes/chat/chat.api.routes");
+const storeRouter = require("./routes/v1/store.routes");
 
 require("dotenv").config({ path: "./.env" });
 
@@ -21,7 +22,8 @@ init.runApp([
       authRouteV1,
       conversationRoute,
       chatv1,
-      apiRouter
+      apiRouter,
+      storeRouter
     ],
   },
   {
